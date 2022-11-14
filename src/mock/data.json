@@ -1,0 +1,19 @@
+{
+    "phones": [
+        {
+            "name": "TurboPhone100",
+            "RAM": "4GB",
+            "id": 1
+        },
+        {
+            "name": "TurboPhone200",
+            "RAM": "6GB",
+            "id": 2
+        },
+        {
+            "name": "TurboPhone300",
+            "RAM": "8GB",
+            "id": 3
+        }
+    ]
+}
