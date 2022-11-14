@@ -10,8 +10,9 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(express.json());
 
-app.use((_req, _resp, next) => {
-    console.log('Middleware');
+app.use((req, _resp, next) => {
+    console.log('Middleware:');
+    console.log(req.body);
     next();
 });
 
