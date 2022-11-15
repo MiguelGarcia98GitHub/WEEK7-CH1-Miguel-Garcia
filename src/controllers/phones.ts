@@ -1,9 +1,12 @@
 import { json, NextFunction, Request, Response } from 'express';
-import importData from '../mock/data.json' assert { type: 'json' };
+import importData from '../mock/data.json';
 import { Phone } from '../interfaces/phone';
-// import fs from 'fs';
+import fs from 'fs';
 
 // eslint-disable-next-line prefer-const
+
+// const dataFile = process.env.DATA_FILE || '';
+// const importData = JSON.parse(fs.readFileSync(dataFile, 'utf-8'));
 let data: Array<Phone> = importData.phones;
 
 export class PhoneController {

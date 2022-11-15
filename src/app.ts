@@ -16,9 +16,8 @@ app.use((req, _resp, next) => {
     next();
 });
 
-app.get('/', (req, res) => {
-    res.send('Express API - Phones');
-    res.end();
+app.get('/', (_req, res) => {
+    res.send('Express API - Phones').end();
 });
 
 app.use('/phones', phoneRouter);
