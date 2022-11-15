@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
+import { json, NextFunction, Request, Response } from 'express';
 import importData from '../mock/data.json' assert { type: 'json' };
 import { Phone } from '../interfaces/phone';
+// import fs from 'fs';
 
 // eslint-disable-next-line prefer-const
 let data: Array<Phone> = importData.phones;
@@ -25,8 +26,19 @@ export class PhoneController {
     post(req: Request, resp: Response) {
         const newPhone = {
             ...req.body,
-            id: data.length + 1,
+            id: Math.floor(Math.random() * 10000),
         };
+
+        //
+
+        // const newData = [...data];
+        // const newString = JSON.parse(newData.toString());
+        // const newArray = newString.toArray();
+
+        // fs.writeFileSync('../mock/data.json', JSON.stringify(newPhone));
+
+        //
+
         data.push(newPhone);
         resp.json(newPhone);
         resp.end();
