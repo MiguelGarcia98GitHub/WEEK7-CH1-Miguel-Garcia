@@ -1,7 +1,7 @@
 import { json, NextFunction, Request, Response } from 'express';
 import importData from '../mock/data.json' assert { type: 'json' };
 import { Phone } from '../interfaces/phone';
-import fs from 'fs';
+// import fs from 'fs';
 
 // eslint-disable-next-line prefer-const
 let data: Array<Phone> = importData.phones;
