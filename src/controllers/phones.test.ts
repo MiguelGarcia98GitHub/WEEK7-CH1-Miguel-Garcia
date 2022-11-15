@@ -18,13 +18,7 @@ describe('Given TaskController', () => {
             resp as unknown as Response,
             next as unknown as NextFunction
         );
-        expect(taskController).toBe({
-           PhoneController {
-       "dataModel": PhoneFileData {
-          "dataFileURL": "dist/mock/data.json",
-        },
-      }
-        });
+        expect(taskController).toBe({});
         // expect(resp.json).toHaveBeenCalled();
         // expect(resp.end).toHaveBeenCalled();
     });
