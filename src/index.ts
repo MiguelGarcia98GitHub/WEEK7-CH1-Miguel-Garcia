@@ -5,7 +5,7 @@ import { CustomError } from './interfaces/error';
 
 const port = 3300;
 const server = http.createServer(app);
-server.on('listening', () => {
+server.on('listenning', () => {
     const addr = server.address();
     if (addr === null) return;
     let bind: string;
