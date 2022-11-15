@@ -1,56 +1,101 @@
 import { NextFunction, Request, Response } from 'express';
-import importData from '../mock/data.json';
-import { Phone } from '../interfaces/phone';
-
-// eslint-disable-next-line prefer-const
-let data: Array<Phone> = importData.phones;
+import { Data } from '../data/data.js';
+import { HTTPError } from '../interfaces/error.js';
+import { Phone } from '../interfaces/phone.js';
 
 export class PhoneController {
-    getAll(req: Request, resp: Response) {
-        resp.json(data);
-        resp.end();
-    }
-
-    get(req: Request, resp: Response, next: NextFunction) {
-        if (!data.find((item) => item.id === +req.params.id)) {
-            next(new Error('Not found'));
+    constructor(public dataModel: Data<Phone>) {}
+    async getAll(_req: Request, resp: Response, next: NextFunction) {
+        try {
+            const data = await this.dataModel.getAll();
+            resp.json(data).end();
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
             return;
         }
-        console.log(req.body);
-        const getItem = data.filter((item) => item.id === +req.params.id);
-        resp.json(getItem);
-        resp.end();
     }
 
-    post(req: Request, resp: Response) {
-        const newPhone = {
-            ...req.body,
-            id: Math.floor(Math.random() * 10000),
-        };
-
-        data.push(newPhone);
-        resp.json(newPhone);
-        resp.end();
+    get(_req: Request, _resp: Response) {
+        // GET IMPLEMENTATION
     }
 
-    patch(req: Request, resp: Response) {
-        const updatePhone = {
-            ...data.find((item) => item.id === +req.params.id),
-            ...req.body,
-        };
-        data[data.findIndex((item) => item.id === +req.params.id)] =
-            updatePhone;
-        resp.json(updatePhone);
-        resp.end();
-    }
-
-    delete(req: Request, resp: Response, next: NextFunction) {
-        if (!data.find((item) => item.id === +req.params.id)) {
-            next(new Error('Not found'));
+    async post(req: Request, resp: Response, next: NextFunction) {
+        if (!req.body.name || !req.body.RAM) {
+            const httpError = new HTTPError(
+                406,
+                'Not Acceptable',
+                'name or RAM parameters not available in your request'
+            );
+            next(httpError);
             return;
         }
-        data = data.filter((item) => item.id !== +req.params.id);
-        resp.json({});
-        resp.end();
+        try {
+            const newPhone = await this.dataModel.post(req.body);
+            resp.json(newPhone).end();
+        } catch (error) {
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+            return;
+        }
+    }
+
+    async patch(req: Request, resp: Response, next: NextFunction) {
+        try {
+            const updatePhone = await this.dataModel.patch(
+                +req.params.id,
+                req.body
+            );
+            resp.json(updatePhone).end();
+        } catch (error) {
+            if ((error as Error).message === 'Not found id') {
+                const httpError = new HTTPError(
+                    404,
+                    'Not Found',
+                    (error as Error).message
+                );
+                next(httpError);
+                return;
+            }
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+            return;
+        }
+    }
+
+    async delete(req: Request, resp: Response, next: NextFunction) {
+        try {
+            await this.dataModel.delete(+req.params.id);
+            resp.json({}).end();
+        } catch (error) {
+            if ((error as Error).message === 'Not found id') {
+                const httpError = new HTTPError(
+                    404,
+                    'Not Found',
+                    (error as Error).message
+                );
+                next(httpError);
+                return;
+            }
+            const httpError = new HTTPError(
+                503,
+                'Service unavailable',
+                (error as Error).message
+            );
+            next(httpError);
+            return;
+        }
     }
 }
