@@ -28,7 +28,7 @@ export class PhoneFileData implements Data<Phone> {
     async post(newPhone: Partial<Phone>): Promise<Phone> {
         const aData = await this.getAll();
         const finalPhone = { ...(newPhone as Phone), id: this.#createID() };
-        console.log(aData, 'SOY UN ARRAY?');
+        console.log(aData);
         aData.phones.push(finalPhone);
         await this.#saveData(aData);
         return finalPhone;
