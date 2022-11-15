@@ -14,7 +14,7 @@ server.on('listening', () => {
     } else {
         bind =
             addr.address === '::'
-                ? `https://week7-ch1.onrender.com/`
+                ? `http://localhost:${addr?.port}`
                 : `port ${addr?.port}`;
     }
     console.log(`Listening on ${bind}`);
