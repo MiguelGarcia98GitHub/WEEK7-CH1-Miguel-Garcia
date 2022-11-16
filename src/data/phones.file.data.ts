@@ -50,11 +50,12 @@ export class PhoneFileData implements Data<Phone> {
     }
 
     async delete(id: number | undefined): Promise<void> {
-        const aData = await this.getAll();
+        let aData = await this.getAll();
         const index = aData.findIndex((item: any) => item.id === id);
         if (!index) throw new Error('Not found id');
-        aData.filter((item: any) => item.id !== id);
+        aData = aData.filter((item: any) => item.id !== id);
         await this.#saveData(aData);
+        return aData;
     }
 
     #createID() {
