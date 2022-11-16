@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { Data } from '../data/data.js';
-import { HTTPError } from '../interfaces/error';
+import { HTTPError } from '../interfaces/error.js';
 import { Phone } from '../interfaces/phone.js';
 
 export class PhoneController {
@@ -20,8 +20,14 @@ export class PhoneController {
         }
     }
 
-    get(_req: Request, _resp: Response) {
+    async get(req: Request, resp: Response) {
         // GET IMPLEMENTATION
+        try {
+            const getSinglePhone = await this.dataModel.get(+req.params.id);
+            resp.json(getSinglePhone).end();
+        } catch {
+            console.log('error');
+        }
     }
 
     async post(req: Request, resp: Response, next: NextFunction) {
