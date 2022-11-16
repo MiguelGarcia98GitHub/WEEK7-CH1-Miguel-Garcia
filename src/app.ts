@@ -11,7 +11,9 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/', (_req, res) => {
-    res.send('API Express - Phones').end();
+    res.send(
+        `API Express - Phones ---- GETALL Endpoint /phones to get all phones (MongoDB) ---- GET Endpoint /phones:name to get a phone by name (MongoDB) ---- POST Endpoint /phones to create a phone (MongoDB)  `
+    ).end();
 });
 
 app.use('/phones', phoneRouter);

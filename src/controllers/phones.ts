@@ -2,56 +2,62 @@ import { NextFunction, Request, Response } from 'express';
 import { Data } from '../data/data.js';
 import { HTTPError } from '../interfaces/error.js';
 import { Phone } from '../interfaces/phone.js';
+import { Document, MongoClient, WithId } from 'mongodb';
+import * as dotenv from 'dotenv'; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
+dotenv.config({ path: '../../.env' });
+import mongoose, { model } from 'mongoose';
 
 export class PhoneController {
     constructor(public dataModel: Data<Phone>) {}
     async getAll(_req: Request, resp: Response, next: NextFunction) {
-        try {
-            const data = await this.dataModel.getAll();
-            resp.json(data).end();
-        } catch (error) {
-            const httpError = new HTTPError(
-                503,
-                'Service unavailable',
-                (error as Error).message
-            );
-            next(httpError);
-            return;
-        }
+        const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSW}@${process.env.CLUSTER}/test/?retryWrites=true&w=majority`;
+        const client = new MongoClient(uri);
+        await client.connect();
+        const db = client.db('test');
+        const coll = db.collection('tasks');
+        const cursor = coll.find();
+        const newCursor: WithId<Document>[] = [];
+        await cursor.forEach((item) => {
+            console.log(item);
+            newCursor.push(item);
+        });
+        await client.close();
+        resp.json(newCursor).end();
     }
 
     async get(req: Request, resp: Response) {
-        // GET IMPLEMENTATION
-        try {
-            const getSinglePhone = await this.dataModel.get(+req.params.id);
-            resp.json(getSinglePhone).end();
-        } catch {
-            console.log('error');
-        }
+        const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSW}@${process.env.CLUSTER}/test/?retryWrites=true&w=majority`;
+        const client = new MongoClient(uri);
+        await client.connect();
+        const db = client.db('test');
+        const coll = db.collection('tasks');
+        const singleGetData = await coll.findOne({ name: req.params.name });
+        await client.close();
+        resp.json(singleGetData).end();
     }
 
     async post(req: Request, resp: Response, next: NextFunction) {
-        if (!req.body.name || !req.body.RAM) {
-            const httpError = new HTTPError(
-                406,
-                'Not Acceptable',
-                'name or RAM parameters not available in your request'
-            );
-            next(httpError);
-            return;
-        }
-        try {
-            const newPhone = await this.dataModel.post(req.body);
-            resp.json(newPhone).end();
-        } catch (error) {
-            const httpError = new HTTPError(
-                503,
-                'Service unavailable',
-                (error as Error).message
-            );
-            next(httpError);
-            return;
-        }
+        console.log(req.body);
+
+        const uri = `mongodb+srv://${process.env.USER}:${process.env.PASSW}@${process.env.CLUSTER}/?retryWrites=true&w=majority`;
+
+        const taskSchema = new mongoose.Schema({
+            name: mongoose.SchemaTypes.String,
+            RAM: String,
+            id: Number,
+        });
+
+        const connector = await mongoose.connect(uri);
+
+        const Task = model('Task', taskSchema, 'tasks');
+
+        await Task.create({
+            ...req.body,
+        });
+
+        connector.disconnect();
+
+        resp.json({ ...req.body }).end();
     }
 
     async patch(req: Request, resp: Response, next: NextFunction) {
