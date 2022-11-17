@@ -1,7 +1,9 @@
-export interface Data<Phone> {
-    getAll: () => Promise<Array<Phone>>;
-    get: (id: number | undefined) => Promise<Phone>;
-    post: (data: Phone) => Promise<Phone>;
-    patch: (id: number | undefined, data: Partial<Phone>) => Promise<Phone>;
-    delete: (id: number | undefined) => Promise<void>;
+export type id = number | string;
+
+export interface Data<T> {
+    getAll: () => Promise<Array<T>>;
+    get: (id: id) => Promise<T>;
+    post: (data: Partial<T>) => Promise<T>;
+    patch: (id: id, data: Partial<T>) => Promise<T>;
+    delete: (id: id) => Promise<void>;
 }
