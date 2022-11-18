@@ -1,4 +1,4 @@
-import { dbConnect } from './dbconnect';
+import { dbConnect } from './dbconnect.js';
 import mongoose from 'mongoose';
 
 test('should first', async () => {
