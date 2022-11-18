@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { CLUSTER, PASS, USER } from './config';
+import { CLUSTER, PASS, USER } from './config.js';
 
 export function dbConnect() {
     const DBName =
