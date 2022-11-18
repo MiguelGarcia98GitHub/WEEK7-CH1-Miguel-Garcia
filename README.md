@@ -1,4 +1,4 @@
-# Week 7 - Challenge 2
+# Week 7 - Challenge 3
 
 ## API REST Things I already know
 
@@ -18,7 +18,7 @@ La API REST debe tener los siguientes endpoints:
 
 ## Opción extra:
 
-Para iniciar la API, el programa debe mostrarle al usuario las siguientes preguntas (utiliza el paquete `inquirer`):
+Para iniciar la API, el programa debe mostrarle al usuario las siguientes preguntas (utiliza el paquete inquirer):
 
 -   ¿En qué puerto quieres que se inicie la API? (respuesta por defecto: 4000)
 -   ¿Qué fichero quieres usar? (pregunta con varias opciones, una única respuesta)
