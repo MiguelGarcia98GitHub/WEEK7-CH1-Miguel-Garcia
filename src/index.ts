@@ -4,6 +4,10 @@ import { dbConnect } from './dbconnect.js';
 
 import { CustomError } from './interfaces/error.js';
 
+import debugFactory from 'debug';
+const debug = debugFactory('http');
+debug('Hello debug');
+
 const port = 3300;
 const server = http.createServer(app);
 server.on('listening', () => {
