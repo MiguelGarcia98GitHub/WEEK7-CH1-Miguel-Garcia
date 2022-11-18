@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ComputersController } from '../controllers/computers.js';
-import { ComputersMongoData } from './../data/computersmongodata.js';
+import { ComputersController } from '../controllers/computers';
+import { ComputersMongoData } from './../data/computersmongodata';
 
 // jest.mock('../data/computersmongodata,js');
 
